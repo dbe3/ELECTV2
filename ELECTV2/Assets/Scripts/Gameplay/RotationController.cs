@@ -1,16 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.EventSystems;
 public class RotationController : MonoBehaviour
 {
     //Attaches to Shape
     [Range(0.5f,3.0f)]
     public float rotationSpeed;
 
-    float rotX;
-    float rotY;
-    float rotZ;
+    int id;
+    int touchId;
+    bool ObjectSelected;
+
     // Update is called once per frame
     void Update()
     {
@@ -32,23 +33,49 @@ public class RotationController : MonoBehaviour
             this.transform.Rotate(0, 0, rotationSpeed, Space.World);
         }
 
-        
-         if (Input.acceleration.x != 0) {
-             transform.Rotate(Input.acceleration.x * rotationSpeed, 0, 0, Space.World);
-         }
-         
-         if (Input.acceleration.y != 0)
-         {
-             transform.Rotate(0, Input.acceleration.y * rotationSpeed, 0, Space.World);
-         }
+        if (Input.touchCount > 0)
+        {
+            /*
+            Touch touch = Input.GetTouch(0);
+            int id = touch.fingerId;
 
-         if (Input.acceleration.z != 0)
-         {
-             transform.Rotate(0, 0, Input.acceleration.z * rotationSpeed, Space.World);
-         }
+            if (touch.phase == TouchPhase.Moved)
+            {
+                if (!EventSystem.current.IsPointerOverGameObject(id))
+                {
+                    transform.Rotate(0f, touch.deltaPosition.x * rotationSpeed, touch.deltaPosition.y * rotationSpeed, Space.World);
+                }
+            }
+            */
 
-        Debug.Log(Input.acceleration.x + " " + Input.acceleration.y + " " + Input.acceleration.z);
-        
+            if (ObjectSelected)
+            {
+                Touch touch = Input.GetTouch(id);
+
+                if (touch.phase == TouchPhase.Moved)
+                {
+                    transform.Rotate(0f, touch.deltaPosition.x * rotationSpeed, touch.deltaPosition.y * rotationSpeed, Space.World);
+                }
+                else if (touch.phase == TouchPhase.Ended)
+                {
+                    ObjectSelected = false;
+                }
+            }
+            else
+            {
+                foreach (Touch touch in Input.touches)
+                {
+                    id = touch.fingerId;
+
+                    if (!EventSystem.current.IsPointerOverGameObject(id))
+                    {
+                        ObjectSelected = true;
+                        touchId = id;
+                        break;
+                    }
+                }
+            }
+        }
 
     }
 }

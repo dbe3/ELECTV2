@@ -5,11 +5,13 @@ using UnityEngine;
 public class CameraScript : MonoBehaviour
 {
     public float cameraSpeed;
+
     // Update is called once per frame
     void Update()
     {
         //this.transform.LookAt(target.transform.position);
 
+        /*
         if (Input.GetKey(KeyCode.LeftArrow))
         {
             this.transform.Rotate(0, cameraSpeed * Time.deltaTime, 0, Space.World);
@@ -18,6 +20,6 @@ public class CameraScript : MonoBehaviour
         {
             this.transform.Rotate(0, -cameraSpeed * Time.deltaTime, 0, Space.World);
         }
-
+        */
     }
 }
